@@ -52,13 +52,13 @@ class myPlayer(mySprite):
     
     def move(self):
         if self.pressed[0]:
-            self.rect = self.rect.move([0,-10])
+            self.rect = self.rect.move([0,-1])
         if self.pressed[1]:
-            self.rect = self.rect.move([0,10])
+            self.rect = self.rect.move([0,1])
         if self.pressed[2]:
-            self.rect = self.rect.move([10,0])
+            self.rect = self.rect.move([1,0])
         if self.pressed[3]:
-            self.rect = self.rect.move([-10,0])
+            self.rect = self.rect.move([-1,0])
 
 def main():
     print("Game is starting... ")
@@ -78,13 +78,32 @@ def main():
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-            player.control(event)
+       
+        if event.type == pygame.KEYDOWN:
+            if event.key == K_w:
+                player.pressed[0] = True 
+            if event.key == K_s:
+                player.pressed[1] = True 
+            if event.key == K_d:
+                player.pressed[2] = True 
+            if event.key == K_a:
+                player.pressed[3] = True
+
+        if event.type == pygame.KEYUP:
+            if event.key == K_w:
+                player.pressed[0] = False
+            if event.key == K_s:
+                player.pressed[1] = False
+            if event.key == K_d:
+                player.pressed[2] = False
+            if event.key == K_a:
+                player.pressed[3] = False
+
+            player.move()
         
         screen.fill(black) # Colors the whole screen black
         screen.blit(player.image, player.rect)
         pygame.display.flip() # Writes the next image to our window
-        time.delay(100)
-
 
 if __name__ == "__main__":
     main()
