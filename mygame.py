@@ -7,6 +7,58 @@
 import sys
 import pygame
 from pygame.locals import *
+import pygame.time as time
+import pygame.font as font
+
+class mySprite():
+    def __init__(self, image, name='', x=0, y=0 ):
+        self.image = image
+        self.rect = image.get_rect()
+        self.rect = self.rect.move(x,y)
+        self.name = name
+
+class myEnemy(mySprite):
+    def __init__(self, vector=[0,0]):
+        super().__init__(image=pygame.image.load("images/ghost.png").convert_alpha())
+        self.vector = vector
+
+class myPlayer(mySprite):
+    def __init__(self):
+        super().__init__(image=pygame.image.load("images/pika2.png").convert_alpha())
+        self.pressed = [False,False,False,False]
+    
+    def control(self, event):
+       if event.type == pygame.KEYDOWN:
+            if event.key == K_w:
+                self.pressed[0] = True 
+            if event.key == K_s:
+                self.pressed[1] = True 
+            if event.key == K_d:
+                self.pressed[2] = True 
+            if event.key == K_a:
+                self.pressed[3] = True
+
+       if event.type == pygame.KEYUP:
+            if event.key == K_w:
+                self.pressed[0] = False
+            if event.key == K_s:
+                self.pressed[1] = False
+            if event.key == K_d:
+                self.pressed[2] = False
+            if event.key == K_a:
+                self.pressed[3] = False
+
+       self.move()
+    
+    def move(self):
+        if self.pressed[0]:
+            self.rect = self.rect.move([0,-10])
+        if self.pressed[1]:
+            self.rect = self.rect.move([0,10])
+        if self.pressed[2]:
+            self.rect = self.rect.move([10,0])
+        if self.pressed[3]:
+            self.rect = self.rect.move([-10,0])
 
 def main():
     print("Game is starting... ")
@@ -14,44 +66,24 @@ def main():
     pygame.init()
     size = width, height = 1280, 720
     black = 0,0,0
-    vector = [1,1]
-    w_pressed = False
+    sprites = []
 
     screen = pygame.display.set_mode(size) # sets screen size
+    pygame.display.set_caption('My Crazy Game')
 
-    ghost = pygame.image.load("images/pika2.png") # loading the image of our character
-    ghostrect = ghost.get_rect()
-
-    player_rect = ghost.get_rect()
+    sprites.append(myEnemy())
+    player = myPlayer()
+    sprites.append(player)
 
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-            
-            if event.type == pygame.KEYDOWN:
-                if event.key == K_w:
-                    w_pressed = True
-           
-            if event.type == pygame.KEYUP:
-                if event.key == K_w:
-                    w_pressed = False
-
-        if w_pressed:
-            player_rect = player_rect.move([1,0])
+            player.control(event)
         
-        ghostrect = ghostrect.move(vector)
-
-        if ghostrect.left < 0 or ghostrect.right > width:
-            vector[0] = -vector[0]
-        if ghostrect.top < 0 or ghostrect.bottom > height:
-            vector[1] = -vector[1]
-
-        
-
         screen.fill(black) # Colors the whole screen black
-        screen.blit(ghost, ghostrect) # Draws our ghost on the screen
-        screen.blit(ghost, player_rect)
+        screen.blit(player.image, player.rect)
         pygame.display.flip() # Writes the next image to our window
+        time.delay(100)
 
 
 if __name__ == "__main__":
