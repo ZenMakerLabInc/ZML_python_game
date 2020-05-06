@@ -4,6 +4,6 @@
 # Purpose: say hello to the world
 # bibbity boopty boop
 
-if __name__ == "__main__":
-    print("Hello World")
+print("Hello World")
+input()
 
