@@ -25,16 +25,15 @@ class myEnemy(mySprite):
 class myPlayer(mySprite):
     def __init__(self):
         super().__init__(image=pygame.image.load("images/pika2.png").convert_alpha())
-        self.pressed = [False,False,False,False]
     
-    def move(self):
-        if self.pressed[0]:
+    def move(self, keys):
+        if keys[K_w]:
             self.rect = self.rect.move([0,-1])
-        if self.pressed[1]:
+        if keys[K_s]:
             self.rect = self.rect.move([0,1])
-        if self.pressed[2]:
+        if keys[K_d]:
             self.rect = self.rect.move([1,0])
-        if self.pressed[3]:
+        if keys[K_a]:
             self.rect = self.rect.move([-1,0])
 
 def main():
@@ -55,29 +54,10 @@ def main():
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-       
-        if event.type == pygame.KEYDOWN:
-            
-            if event.key == K_w:
-                player.pressed[0] = True 
-            if event.key == K_s:
-                player.pressed[1] = True 
-            if event.key == K_d:
-                player.pressed[2] = True 
-            if event.key == K_a:
-                player.pressed[3] = True
+        
+        keys = pygame.key.get_pressed()
+        player.move(keys)
 
-        if event.type == pygame.KEYUP:
-            if event.key == K_w:
-                player.pressed[0] = False 
-            if event.key == K_s:
-                player.pressed[1] = False 
-            if event.key == K_d:
-                player.pressed[2] = False 
-            if event.key == K_a:
-                player.pressed[3] = False 
-
-        player.move()
         screen.fill(black) # Colors the whole screen black
         screen.blit(player.image, player.rect)
         pygame.display.flip() # Writes the next image to our window
