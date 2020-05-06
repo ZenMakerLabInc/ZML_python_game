@@ -14,5 +14,5 @@ setup(  name = "helloworld",
         version = "0.1",
         description = "sfjkasdf",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("helloworld.py", base=base)])
+        executables = [Executable("helloworld.py", base=base, icon="pika.ico")])
         
