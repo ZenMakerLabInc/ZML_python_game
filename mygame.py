@@ -10,6 +10,10 @@ from pygame.locals import *
 import pygame.time as time
 import pygame.font as font
 
+#Relative speed of sprites to framerate
+fps = 60 
+sp = 800 / fps
+
 class mySprite():
     def __init__(self, image, name='', x=0, y=0 ):
         self.image = image
@@ -18,7 +22,7 @@ class mySprite():
         self.name = name
 
 class myEnemy(mySprite):
-    def __init__(self, vector=[0,0]):
+    def __init__(self, vector=[0*sp,0*sp]):
         super().__init__(image=pygame.image.load("images/ghost.png").convert_alpha())
         self.vector = vector
 
@@ -28,13 +32,13 @@ class myPlayer(mySprite):
     
     def move(self, keys):
         if keys[K_w]:
-            self.rect = self.rect.move([0,-1])
+            self.rect = self.rect.move([0,-sp])
         if keys[K_s]:
-            self.rect = self.rect.move([0,1])
+            self.rect = self.rect.move([0,sp])
         if keys[K_d]:
-            self.rect = self.rect.move([1,0])
+            self.rect = self.rect.move([sp,0])
         if keys[K_a]:
-            self.rect = self.rect.move([-1,0])
+            self.rect = self.rect.move([-sp,0])
 
 def main():
     print("Game is starting... ")
@@ -45,6 +49,7 @@ def main():
     sprites = []
 
     screen = pygame.display.set_mode(size) # sets screen size
+    clock = pygame.time.Clock()
     pygame.display.set_caption('My Crazy Game')
 
     sprites.append(myEnemy())
@@ -60,7 +65,8 @@ def main():
 
         screen.fill(black) # Colors the whole screen black
         screen.blit(player.image, player.rect)
-        pygame.display.flip() # Writes the next image to our window
+        pygame.display.flip() # Writes the next image to our window   
+        clock.tick(fps)
 
 if __name__ == "__main__":
     main()
